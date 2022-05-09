@@ -9,19 +9,51 @@
 config_version=4
 
 _global_script_classes=[ {
-"base": "",
+"base": "BaseController",
+"class": "AIController",
+"language": "GDScript",
+"path": "res://paddle/ai_controller.gd"
+}, {
+"base": "Reference",
+"class": "BaseController",
+"language": "GDScript",
+"path": "res://paddle/base_controller.gd"
+}, {
+"base": "EditorVCSInterface",
 "class": "GitAPI",
 "language": "NativeScript",
 "path": "res://addons/godot-git-plugin/git_api.gdns"
+}, {
+"base": "KinematicBody2D",
+"class": "Paddle",
+"language": "GDScript",
+"path": "res://paddle/paddle.gd"
+}, {
+"base": "BaseController",
+"class": "PlayerController",
+"language": "GDScript",
+"path": "res://paddle/player_controller.gd"
 } ]
 _global_script_class_icons={
-"GitAPI": ""
+"AIController": "",
+"BaseController": "",
+"GitAPI": "",
+"Paddle": "",
+"PlayerController": ""
 }
 
 [application]
 
 config/name="SplicerPong"
+run/main_scene="res://arena/arena.tscn"
 config/icon="res://icon.png"
+
+[display]
+
+window/size/width=1920
+window/size/height=1080
+window/stretch/mode="2d"
+window/stretch/aspect="keep"
 
 [gdnative]
 
@@ -36,4 +68,3 @@ common/enable_pause_aware_picking=true
 quality/driver/driver_name="GLES2"
 vram_compression/import_etc=true
 vram_compression/import_etc2=false
-environment/default_environment="res://default_env.tres"
