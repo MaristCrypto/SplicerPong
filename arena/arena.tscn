@@ -1,10 +1,56 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://arena/wall.tscn" type="PackedScene" id=1]
 [ext_resource path="res://ball/ball.tscn" type="PackedScene" id=2]
 [ext_resource path="res://paddle/paddle.tscn" type="PackedScene" id=3]
+[ext_resource path="res://ui/resources/theme.tres" type="Theme" id=4]
+[ext_resource path="res://arena/resources/score_font.tres" type="DynamicFont" id=5]
+[ext_resource path="res://arena/ui.gd" type="Script" id=6]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 40, 600 )
 
 [node name="arena" type="Node2D"]
+
+[node name="ui" type="Control" parent="."]
+margin_right = 1920.0
+margin_bottom = 1080.0
+script = ExtResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="scoreLeft" type="Label" parent="ui"]
+anchor_left = 0.25
+anchor_top = 0.5
+anchor_right = 0.25
+anchor_bottom = 0.5
+margin_top = -150.0
+margin_right = 200.0
+margin_bottom = 150.0
+theme = ExtResource( 4 )
+custom_colors/font_color = Color( 0.423529, 0.423529, 0.423529, 1 )
+custom_fonts/font = ExtResource( 5 )
+text = "0"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="scoreRight" type="Label" parent="ui"]
+anchor_left = 0.75
+anchor_top = 0.5
+anchor_right = 0.75
+anchor_bottom = 0.5
+margin_top = -150.0
+margin_bottom = 150.0
+grow_horizontal = 0
+theme = ExtResource( 4 )
+custom_colors/font_color = Color( 0.423529, 0.423529, 0.423529, 1 )
+custom_fonts/font = ExtResource( 5 )
+text = "0"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="bottom_wall" parent="." instance=ExtResource( 1 )]
 position = Vector2( 960, 1070 )
@@ -15,9 +61,24 @@ position = Vector2( 960, 10 )
 [node name="ball" parent="." instance=ExtResource( 2 )]
 position = Vector2( 960, 540 )
 
-[node name="paddle" parent="." instance=ExtResource( 3 )]
+[node name="paddleLeft" parent="." instance=ExtResource( 3 )]
 position = Vector2( 50, 540 )
 
-[node name="paddle2" parent="." instance=ExtResource( 3 )]
+[node name="paddleRight" parent="." instance=ExtResource( 3 )]
 position = Vector2( 1870, 540 )
 controllerType = 1
+
+[node name="score_zone_l" type="Area2D" parent="." groups=["score_zone"]]
+position = Vector2( -100, 540 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="score_zone_l"]
+shape = SubResource( 1 )
+
+[node name="score_zone_r" type="Area2D" parent="." groups=["score_zone"]]
+position = Vector2( 2020, 540 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="score_zone_r"]
+shape = SubResource( 1 )
+
+[connection signal="body_entered" from="score_zone_l" to="ball" method="_on_body_entered_score_zone" binds= [ 1 ]]
+[connection signal="body_entered" from="score_zone_r" to="ball" method="_on_body_entered_score_zone" binds= [ 0 ]]

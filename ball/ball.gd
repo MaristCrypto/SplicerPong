@@ -22,10 +22,6 @@ func _reset_ball() -> void:
 # _physics_process is called each physics "frame" (not necessarily tied to the render framerate), the
 # delta argument contains the time elapsed since last physics frame in milliseconds
 func _physics_process(delta: float) -> void:
-	# if the ball is outside the play area reset it
-	if position.x < -100 or position.x > get_viewport_rect().size.x + 100:
-		_reset_ball()
-		return
 	# move_and_collides moves the object along the provided vector. If a collision happens it stops the translation
 	# and returns a collision object, otherwise null is returned
 	var collision := move_and_collide(_velocity * delta, false)
@@ -45,4 +41,9 @@ func _physics_process(delta: float) -> void:
 		var opponentDir = Vector2(get_viewport_rect().size.x / 2 - position.x, 0).normalized()
 		# shoot the ball against the opponent at an angle between -maxPaddleBounceAngle, +maxPaddleBounceAngle
 		_velocity = opponentDir.rotated(hitPositionRelative * deg2rad(maxPaddleBounceAngle) * opponentDir.x) * _velocity.length()
-		
+
+func _on_body_entered_score_zone(body: Node2D, zoneForPlayer: int) -> void:
+	if body != self:
+		return
+	Signals.emit_signal("player_scored", zoneForPlayer)
+	_reset_ball()
